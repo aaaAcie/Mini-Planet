@@ -2,9 +2,9 @@
 	<view>
 		<view class="header-box">
 			<swiper class="swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
-				<swiper-item>
-					<navigator open-type="navigate" url="'/pages/webview/webview?url=' + 'baidu.com'">
-						<image class="banner-swiper-img" src="https://pica.zhimg.com/50/v2-4dc534bf2a59b64e77fe9327210336d4_720w.jpg?source=1940ef5c" mode="aspectFill"></image>
+				<swiper-item v-for="item in swiperAdList" :key="item.id">
+					<navigator open-type="navigate" :url="'/pages/webview/webview?url=' + item.link">
+						<image class="banner-swiper-img" :src="item.image" mode="aspectFill"></image>
 					</navigator>
 				</swiper-item>
 			</swiper>
@@ -25,17 +25,30 @@
 </template>
 
 <script>
+	import { getAds } from '@/config/api.js'
 	export default {
 		data() {
 			return {
-				title: 'Hello'
+				title: 'Hello',
+				swiperAdList: []
 			}
 		},
-		onLoad() {
-
+		async onLoad() {
+			this.getAdverts()
 		},
 		methods: {
-
+			async getAdverts() {
+				let adverts = await getAds()
+				console.log(adverts)
+				this.swiperAdList = adverts.map(item => {
+					return {
+						id: item.id,
+						link: item.data.link,
+						image: item.data.image
+					}
+				})
+				console.log('swiperAdList== ',this.swiperAdList)
+			},
 		}
 	}
 </script>

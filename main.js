@@ -1,14 +1,15 @@
 import App from './App'
 import uView from 'uview-ui'
-Vue.use(uView)
 
 // #ifndef VUE3
 import Vue from 'vue'
 Vue.config.productionTip = false
+Vue.use(uView)
 App.mpType = 'app'
 const app = new Vue({
     ...App
 })
+require('@/config/request.js')(app)
 app.$mount()
 // #endif
 
@@ -16,6 +17,8 @@ app.$mount()
 import { createSSRApp } from 'vue'
 export function createApp() {
   const app = createSSRApp(App)
+	app.use(uView)
+	require('@/config/request.js')(app)
   return {
     app
   }

@@ -17904,6 +17904,89 @@ platform = 'mp';var _default =
 
 platform;exports.default = _default;
 
+/***/ }),
+/* 158 */,
+/* 159 */,
+/* 160 */,
+/* 161 */,
+/* 162 */,
+/* 163 */,
+/* 164 */
+/*!*****************************************************************************!*\
+  !*** D:/SOMETHING/SLASH/front-end/homework/6-2/意外小星球-跨平台多端社区/config/api.js ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.getAds = void 0;var http = uni.$u.http;
+
+// post请求，获取菜单
+// export const postMenu = (params, config = {}) => http.post('/ebapi/public_api/index', params, config)
+
+// get请求，获取菜单，注意：get请求的配置等，都在第二个参数中，详见前面解释
+var getAds = function getAds(data) {return http.get('/advertisingspace/advertising?space=1,2,3');};exports.getAds = getAds;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+/* 165 */
+/*!*********************************************************************************!*\
+  !*** D:/SOMETHING/SLASH/front-end/homework/6-2/意外小星球-跨平台多端社区/config/request.js ***!
+  \*********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(uni) {// 此vm参数为页面的实例，可以通过它引用vuex中的变量
+module.exports = function (vm) {
+  // 初始化请求配置
+  uni.$u.http.setConfig(function (config) {
+    /* config 为默认全局配置*/
+    config.baseURL = 'http://ts.lagou.uieee.com/api/v2'; /* 根域名 */
+    return config;
+  });
+
+  // 请求拦截
+  uni.$u.http.interceptors.request.use(function (config) {var _config$custom; // 可使用async await 做异步操作
+    // 初始化请求拦截器时，会执行此方法，此时data为undefined，赋予默认{}
+    config.data = config.data || {};
+    // 根据custom参数中配置的是否需要token，添加对应的请求头
+    if (config === null || config === void 0 ? void 0 : (_config$custom = config.custom) === null || _config$custom === void 0 ? void 0 : _config$custom.auth) {
+      // 可以在此通过vm引用vuex中的变量，具体值在vm.$store.state中
+      config.header.token = vm.$store.state.userInfo.token;
+    }
+    return config;
+  }, function (config) {// 可使用async await 做异步操作
+    return Promise.reject(config);
+  });
+
+  // 响应拦截
+  uni.$u.http.interceptors.response.use(function (response) {var _response$config; /* 对响应成功做点什么 可使用async await 做异步操作*/
+    var data = response.data;
+    console.log('拦截响应 ', response);
+    // 自定义参数
+    var custom = (_response$config = response.config) === null || _response$config === void 0 ? void 0 : _response$config.custom;
+    if (response.statusCode !== 200) {
+      // 如果没有显式定义custom的toast参数为false的话，默认对报错进行toast弹出提示
+      if (custom.toast !== false) {
+        uni.$u.toast(data.message);
+      }
+
+      // 如果需要catch返回，则进行reject
+      if (custom === null || custom === void 0 ? void 0 : custom.catch) {
+        return Promise.reject(data);
+      } else {
+        // 否则返回一个pending中的promise，请求不会进入catch中
+        return new Promise(function () {});
+      }
+    }
+    return data;
+  }, function (response) {
+    // 对响应错误做点什么 （statusCode !== 200）
+    return Promise.reject(response);
+  });
+};
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
 /***/ })
 ]]);
 //# sourceMappingURL=../../.sourcemap/mp-weixin/common/vendor.js.map
